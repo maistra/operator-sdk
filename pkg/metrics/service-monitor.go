@@ -35,8 +35,13 @@ type ServiceMonitorUpdater func(*monitoringv1.ServiceMonitor) error
 // If CR ServiceMonitor is not registered in the Cluster it will not attempt at creating resources.
 func CreateServiceMonitors(config *rest.Config, ns string, services []*v1.Service,
 	updaters ...ServiceMonitorUpdater) ([]*monitoringv1.ServiceMonitor, error) {
+	return CreateServiceMonitors0(config, discovery.NewDiscoveryClientForConfigOrDie(config), ns, services, updaters...)
+}
+
+func CreateServiceMonitors0(config *rest.Config, dc discovery.DiscoveryInterface, ns string, services []*v1.Service,
+	updaters ...ServiceMonitorUpdater) ([]*monitoringv1.ServiceMonitor, error) {
 	// check if we can even create ServiceMonitors
-	exists, err := hasServiceMonitor(config)
+	exists, err := hasServiceMonitor(dc)
 	if err != nil {
 		return nil, err
 	}
@@ -112,8 +117,7 @@ func populateEndpointsFromServicePorts(s *v1.Service) []monitoringv1.Endpoint {
 }
 
 // hasServiceMonitor checks if ServiceMonitor is registered in the cluster.
-func hasServiceMonitor(config *rest.Config) (bool, error) {
-	dc := discovery.NewDiscoveryClientForConfigOrDie(config)
+func hasServiceMonitor(dc discovery.DiscoveryInterface) (bool, error) {
 	apiVersion := "monitoring.coreos.com/v1"
 	kind := "ServiceMonitor"
 
