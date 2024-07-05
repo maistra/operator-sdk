@@ -53,7 +53,7 @@ func CreateMetricsService(ctx context.Context, cfg *rest.Config, servicePorts []
 // port(s) with the given name(s).
 func CreateMetricsService0(ctx context.Context, client crclient.Client, servicePorts []v1.ServicePort) (*v1.Service, error) {
 	if len(servicePorts) < 1 {
-		return nil, fmt.Errorf("failed to create metrics Serice; service ports were empty")
+		return nil, fmt.Errorf("failed to create metrics Service; service ports were empty")
 	}
 	s, err := initOperatorService(ctx, client, servicePorts)
 	if err != nil {
