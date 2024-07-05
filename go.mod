@@ -52,6 +52,10 @@ require (
 	sigs.k8s.io/yaml v1.2.0
 )
 
+replace vbom.ml/util => github.com/fvbommel/util v0.0.0-20180919145318-efcd4e0f9787
+
+replace github.com/mikefarah/yaml/v2 => gopkg.in/yaml.v2 v2.4.0
+
 replace (
 	github.com/Azure/go-autorest => github.com/Azure/go-autorest v13.3.2+incompatible // Required by OLM
 	github.com/mattn/go-sqlite3 => github.com/mattn/go-sqlite3 v1.10.0

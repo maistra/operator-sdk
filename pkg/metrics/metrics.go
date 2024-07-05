@@ -42,12 +42,18 @@ const (
 // CreateMetricsService creates a Kubernetes Service to expose the passed metrics
 // port(s) with the given name(s).
 func CreateMetricsService(ctx context.Context, cfg *rest.Config, servicePorts []v1.ServicePort) (*v1.Service, error) {
-	if len(servicePorts) < 1 {
-		return nil, fmt.Errorf("failed to create metrics Serice; service ports were empty")
-	}
 	client, err := crclient.New(cfg, crclient.Options{})
 	if err != nil {
 		return nil, fmt.Errorf("failed to create new client: %w", err)
+	}
+	return CreateMetricsService0(ctx, client, servicePorts)
+}
+
+// CreateMetricsService creates a Kubernetes Service to expose the passed metrics
+// port(s) with the given name(s).
+func CreateMetricsService0(ctx context.Context, client crclient.Client, servicePorts []v1.ServicePort) (*v1.Service, error) {
+	if len(servicePorts) < 1 {
+		return nil, fmt.Errorf("failed to create metrics Service; service ports were empty")
 	}
 	s, err := initOperatorService(ctx, client, servicePorts)
 	if err != nil {
